@@ -14,11 +14,20 @@ import 'package:login_bloc_test/business_logic/cubit/leave_list_cubit.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  bool isPasswordVisible = false;
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   AuthCubit() : super(AuthInitial());
 
   static AuthCubit get(context) => BlocProvider.of(context);
+  void showPassword() {
+    isPasswordVisible = true;
+    emit(AuthPasswordVisibilityChanged());
+  }
 
+  void hidePassword() {
+    isPasswordVisible = false;
+    emit(AuthPasswordVisibilityChanged());
+  }
   // Login function using Dio
   Future<void> login(BuildContext context,String username, String password) async {
     emit(AuthLoading());

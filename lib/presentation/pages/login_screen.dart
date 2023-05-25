@@ -59,6 +59,7 @@ class Login_page extends StatelessWidget {
                     const SizedBox(height: 5,),
                     TextFormField(
                       controller: PasswordController,
+                      obscureText: !AuthCubit.get(context).isPasswordVisible,
                       style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                           fillColor: Colors.white,
@@ -68,12 +69,21 @@ class Login_page extends StatelessWidget {
                           enabledBorder:_EnapleOutlineInputBorder,
                           focusedBorder:_OutlineInputBorder,
                           suffixIcon: IconButton(
-                            onPressed: (){},
-                            icon: Icon(Icons.visibility/*  : Icons.visibility_off*/),)
+                            onPressed: () {
+                              if (AuthCubit.get(context).isPasswordVisible) {
+                                AuthCubit.get(context).hidePassword();
+                              } else {
+                                AuthCubit.get(context).showPassword();
+                              }
+                            },
+                            icon: Icon(AuthCubit.get(context).isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off)
                       ),
-                    ),
-                    const SizedBox(height: 20,),
-                    ElevatedButton(onPressed: (){
+                    ),),
+                     SizedBox(height: 20,),
+                    ElevatedButton(
+                      onPressed: (){
                       AuthCubit.get(context).login(context, UserEmailController.text, PasswordController.text);
                     },
                       style: ElevatedButton.styleFrom(
@@ -86,7 +96,11 @@ class Login_page extends StatelessWidget {
                           borderRadius:
                           BorderRadius.all(Radius.circular(10)),
                         ),
-                      ), child: const Text("Login",style: TextStyle(fontSize: 19,fontWeight: FontWeight.w500),),)
+                      ), child:  Text("Login",
+                        style: TextStyle(fontSize: 19,fontWeight: FontWeight.w500),
+                      ),
+                    )
+
                   ],
                 ),
               )

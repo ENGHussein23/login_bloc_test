@@ -10,6 +10,8 @@ class AuthLoading extends AuthState {}
 
 class AuthAuthenticated extends AuthState {}
 
+class AuthPasswordVisibilityChanged extends AuthState{}
+
 class AuthError extends AuthState {
   final String message;
 
