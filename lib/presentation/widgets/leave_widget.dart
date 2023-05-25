@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:login_bloc_test/business_logic/constants/colors.dart';
 import 'line_in_leave_widget.dart';
 
 class LeaveWidget extends StatelessWidget{
@@ -22,11 +22,11 @@ class LeaveWidget extends StatelessWidget{
               width: 1.0), // Set border width
           borderRadius: const BorderRadius.all(
               Radius.circular(10.0)), // Set rounded corner radius
-          boxShadow: const [
+          boxShadow:  [
             BoxShadow(
                 blurRadius: 10,
-                color: Colors.black38,
-                offset: Offset(1, 3))
+                color: button_color,
+                offset: const Offset(1, 3))
           ] // Make rounded corner of border
       ),
       child: Column(

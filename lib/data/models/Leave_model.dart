@@ -1,27 +1,38 @@
 class Leave_List{
-  late Data data;
+  late DataLeave dataLeave;
   late int response;
   late String message;
-  Leave_List.fromJson(Map<String,dynamic> json){
-    data=json["data"];
+  Leave_List();
+  Leave_List.fromJson(var json){
+    dataLeave=DataLeave.fromJson(json["data"]);
     response=json["response"];
      message=json["message"];
   }
 }
-class Data{
+class DataLeave{
   late int companyId;
-  late String departmentId;
+  late int departmentId;
   late int employeeId;
   late String fromDate;
   late String toDate;
   late List <Leave> Leaves;
-  Data.fromJson(Map<String,dynamic> json){
+
+  DataLeave();
+
+  DataLeave.fromJson(Map<String,dynamic> json){
     companyId=json["companyId"];
     departmentId=json["departmentId"];
     employeeId=json["employeeId"];
-    fromDate=json["fromDate"];
-    toDate=json["toDate"];
-    Leaves=json["leaves"];
+    fromDate=json["fromDate"]?? "null";
+    toDate=json["toDate"]?? "null";
+    Leaves = [];
+    if (json["leaves"] != null) {
+      Leaves = (json["leaves"] as List)
+          .map((item) => Leave.fromJson(item))
+          .toList();
+    } else {
+      Leaves = [];
+    }
   }
 }
 class Leave{
@@ -36,7 +47,6 @@ class Leave{
   late String absenceFrom;
   late String absenceTo;
   late String notes;
-
   Leave.fromJson(Map<String,dynamic> json){
     id=json["id"];
     employeeName=json["employeeName"];
@@ -48,6 +58,6 @@ class Leave{
     typeId=json["typeId"];
     absenceFrom=json["absenceFrom"];
     absenceTo=json["absenceTo"];
-    notes=json["notes"];
+    notes=json["notes"] ?? "null";
   }
 }

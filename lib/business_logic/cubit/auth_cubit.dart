@@ -3,18 +3,18 @@ import 'package:login_bloc_test/business_logic/constants/colors.dart';
 import 'package:login_bloc_test/data/models/LeaveCount.dart';
 import 'package:login_bloc_test/presentation/pages/second_screen.dart';
 import 'package:login_bloc_test/data/models/LoginResponse.dart';
-import 'package:login_bloc_test/data/models/Leave_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'dart:async';
-
+import 'package:login_bloc_test/business_logic/cubit/leave_list_cubit.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   AuthCubit() : super(AuthInitial());
 
   static AuthCubit get(context) => BlocProvider.of(context);
@@ -23,6 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> login(BuildContext context,String username, String password) async {
     emit(AuthLoading());
     try {
+      final dialogContext = navigatorKey.currentContext ?? context;
       showDialog(
         context:context ,
           barrierDismissible: false,
@@ -42,18 +43,38 @@ class AuthCubit extends Cubit<AuthState> {
         login_url_post_api,
         data: {'username': username, 'password': password},
       );
-      Navigator.pop(context);
+      Navigator.pop(dialogContext);
       // Handle the API response
       if (response.statusCode == 200) {
         // Login was successful
         emit(AuthAuthenticated());
         LoginRespnse loginResponse = LoginRespnse.fromJson(response.data);
+
+
         // After the login is successful, the api leaves counter is requested and passed to the second screen
+
         Dio LeaveCountDio=Dio();
+
         LeaveCountDio.options.headers["Authorization"]="Bearer ${loginResponse.logInData.accessToken}";
+
         Response LeaveCountResponse = await LeaveCountDio.get(leave_count_get_api+"${loginResponse.logInData.user.employee.id}");
+
         LeaveCount leaveCount=LeaveCount.fromJson(LeaveCountResponse.data);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(loginResponse: loginResponse,leaveCount:leaveCount),),);
+
+        LeaveListCubit leaveListCubit=LeaveListCubit();
+
+
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BlocProvider<LeaveListCubit>(
+              create: (context) => leaveListCubit,
+              child: SecondScreen(loginResponse: loginResponse,leaveCount:leaveCount),
+            ),
+          ),
+        );
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(loginResponse: loginResponse,leaveCount:leaveCount),),);
       } else {
         // Login failed
         print("Login failed \n"+response.toString());
