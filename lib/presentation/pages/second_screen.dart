@@ -132,6 +132,7 @@ class SecondScreen extends StatelessWidget{
                //     ],
                //   ),
                // ),
+               //////////////////////
                Container(
                  decoration: const BoxDecoration(
                    image: DecorationImage(
@@ -188,69 +189,9 @@ class SecondScreen extends StatelessWidget{
                ),
              ],
            ),
-
-
          ],
        ),
      ),
    );
   }
 }
-
-/*
-
- body:BlocBuilder<LeaveListCubit, LeaveListState>(
-       builder: (context, state) {
-         if (state is LeaveListLoading) {
-           return Center(
-             child: CircularProgressIndicator(),
-           );
-         } else if (state is LeaveListLoaded) {
-           // Render the list of leaves using the data from the LeaveListLoaded state
-           Leave_List leaveList = state.leaveList;
-           return Container(
-             height: heightMax - 242,
-             // padding: EdgeInsets.all(10),
-             child: ListView.builder(
-               shrinkWrap: true,
-               itemCount: leaveList.data.Leaves.length,
-               itemBuilder: (BuildContext context, int index) {
-                 Leave leave = leaveList.data.Leaves[index];
-                 return LeaveWidget(
-                   "from ${leave.absenceFrom} to ${leave.absenceTo}",
-                   leave.statusName                    ,
-                   leave.notes ?? "No Notes",
-                   leave.statusName,
-                 );
-               },
-             ),
-           );
-         } else if (state is LeaveListError) {
-           // Render an error message with a button to refresh the data
-           return Center(
-             child: Column(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 Text(
-                   state.message,
-                   style: TextStyle(fontSize: 18),
-                   textAlign: TextAlign.center,
-                 ),
-                 SizedBox(height: 16),
-                 ElevatedButton(
-                   onPressed: () {
-                     // context.read<LeaveLisCubit>().fetchLeaveList(
-                     //   // Pass in the same parameters as before
-                     // );
-                   },
-                   child: Text('Refresh'),
-                 ),
-               ],
-             ),
-           );
-         } else {
-           return Container(); // Render an empty container if the state is not recognized
-         }
-       },
-     ),
- */
